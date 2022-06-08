@@ -168,3 +168,4 @@ cython_debug/
 *.vsix
 
 # Additional project specific
+.python-version

@@ -14,7 +14,7 @@ This project was created using ``poetry``. The ``--src`` flag tells it to use a 
 
 ``poetry`` also creates a ``pyproject.toml`` file for configuring the project.
 
-``poetry`` sets up ``pytest`` for testing, and that is set up automatically by ``poetry new``. We do need to tell tooling that runs ``pytest`` outside of ``poetry`` (like **VSCode**) that Python modules used in test are found in the ``src`` directory. This happens in the ``[tool.pytest.ini_options]`` section in ``pyproject.toml``.
+``poetry`` sets up ``pytest`` for testing, and that is set up automatically by ``poetry new``. We may need to tell tooling that runs ``pytest`` outside of ``poetry`` (like **VSCode**) that Python modules used in test are found in the ``src`` directory. This happens in the ``[tool.pytest.ini_options]`` section in ``pyproject.toml``.
 
 ``poetry`` will find or setup a virtual enviroment on first run. Using ``poetry install`` instead of ``pip install`` will setup the virtual environment. ``poetry`` tries to guess the version of ``python`` to install so there are interactiopns with ``pyenv`` (which I use) and the specific versions of ``python`` mentioned in the ``[tool.poetry.dependencies]`` section of ``pyproject.toml``. See ``pyenv`` and ``poetry`` docs for more info. 
 
@@ -80,6 +80,19 @@ then set::
     testpaths = ["tests"]
     # in case tooling running pytest will not resolve modules
     pythonpath = ["src"]
+
+.............................. 
+What's in it
+.............................. 
+
+* ``poetry`` for managing dependencies and performing simple builds
+* ``pytest`` for testing
+* ``FastAPI`` for demoing simple annotation and model driven reactive web API
+* ``Typer`` for creating and using a simple CLI 
+* ``Sphinx`` for docs
+* ``isort``, ``black``, and ``flake8`` for code formatting, linting, and checking
+* ``pre-commit`` hooks — NOT YET
+
 
 ...............................
 What's next?

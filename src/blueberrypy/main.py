@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Path, Query
+from rdflib import Graph
 
 from blueberrypy.services import _greeting
 
@@ -7,7 +8,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return _greeting("world")
+    return _greeting("world!")
 
 
 @app.get("/{name}")

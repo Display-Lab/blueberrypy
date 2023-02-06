@@ -18,7 +18,6 @@ flake8 = "^4.0.1"
 
 [tool.poetry.scripts]
 blueberrypy = "blueberrypy.cli:app"
-bpy = "uvicorn blueberrypy.main:app --reload"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

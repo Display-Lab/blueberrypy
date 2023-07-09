@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Path, Query
-from rdflib import Graph
+# from rdflib import Graph
 
 from blueberrypy.services import _greeting
 

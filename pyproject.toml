@@ -5,9 +5,9 @@ description = ""
 authors = ["pboisver <pboisver@umich.edu>"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 typer = {extras = ["all"], version = "^0.4.1"}
-rdflib = "^6.2.0"
+# rdflib = "^6.2.0"
 fastapi = {extras = ["all"], version = "^0.89.1"}
 
 [tool.poetry.dev-dependencies]

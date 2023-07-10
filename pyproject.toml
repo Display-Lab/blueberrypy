@@ -9,6 +9,8 @@ python = "^3.10"
 typer = {extras = ["all"], version = "^0.4.1"}
 # rdflib = "^6.2.0"
 fastapi = {extras = ["all"], version = "^0.89.1"}
+pkginfo = "^1.9.6"
+pipenv = "^2023.7.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1"

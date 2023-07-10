@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "a90210"
+version = "0.1.0"
+description = ""
+authors = ["pboisver <pboisver@umich.edu>"]
+readme = "README.md"
+packages = [{include = "a90210", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pkginfo = "^1.9.6"
+maya = "^0.6.1"
+pipenv = "^2023.7.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

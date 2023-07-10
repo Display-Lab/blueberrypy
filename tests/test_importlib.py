@@ -24,6 +24,7 @@ def test_basic_relative_import_works():
 
     assert module.hello_with_import.sup() == "Sup... Hi there!"
 
+    del modules[spec.name] # cleanup
 
 def test_loading_parent_package_works():
     pspec = importlib.util.spec_from_file_location(
@@ -45,8 +46,11 @@ def test_loading_parent_package_works():
 
     s = importlib.import_module("pack29.mod42")
 
+    del modules[spec.name] # cleanup
 
-def test_package_folder_name_match():
+
+
+def test_package_folder_name_not_matching():
     spec = importlib.util.spec_from_file_location("90210", "etc/pack_a/__init__.py")
     module = importlib.util.module_from_spec(spec)
     modules[spec.name] = module
@@ -65,26 +69,27 @@ def test_package_folder_name_match():
     assert module.mod_b.sup() == "Sup... Hi there!"
     assert module.mod_a.hello() == "Hi there!"
 
-    pass
+    del modules[spec.name] # cleanup
 
 
 def test_package_folder_name_with_dots():
-    spec = importlib.util.spec_from_file_location("90210", "etc/1.2.3/__init__.py")
+    spec = importlib.util.spec_from_file_location("pack_a", "etc/1.2.3/__init__.py")
     module = importlib.util.module_from_spec(spec)
     modules[spec.name] = module
-    spec.loader.exec_module(module) # module='pack_a', this works; imports submodules declaratively
+    # spec.loader.exec_module(module) # module='pack_a', this works; imports submodules declaratively
     # importlib.import_module('pack_a') # does not work
     # importlib.import_module('.mod_b',module.__name__) # works, also imports 'mod_a' transitively
-    # importlib.import_module('pack_a.mod_b') # works, also imports 'mod_a'
-    # importlib.import_module('pack_a.mod_a') # does not work, get 'mod_a' but not 'mod_b'
+    foo = importlib.import_module('pack_a.mod_b') # works, same as above. 'foo' is a local alias for 'mod_b'
+    # importlib.import_module('pack_a.mod_a') # does not work, gets 'mod_a' but not 'mod_b'
+
+    assert module.mod_b.sup() == "Sup... Hi there!"
+    assert module.mod_a.hello() == "Hi there!"
+    assert foo.sup() == "Sup... Hi there!"
+
+    importlib.reload(modules["pack_a.mod_b"])
+    importlib.reload(modules["pack_a.mod_a"])
 
     assert module.mod_b.sup() == "Sup... Hi there!"
     assert module.mod_a.hello() == "Hi there!"
 
-    importlib.reload(modules["90210.mod_b"])
-    importlib.reload(modules["90210.mod_a"])
-
-    assert module.mod_b.sup() == "Sup... Hi there!"
-    assert module.mod_a.hello() == "Hi there!"
-
-    pass
+    del modules[spec.name] # cleanup

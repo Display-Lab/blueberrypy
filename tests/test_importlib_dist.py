@@ -23,7 +23,7 @@ def test_basic_relative_import_works():
     )
     module = importlib.util.module_from_spec(spec)
     modules[spec.name] = module
-    foo = importlib.import_module(".mod_b",spec.name)
+    foo = importlib.import_module(".mod_b", spec.name)
 
     # spec.loader.exec_module(module)
 
@@ -49,7 +49,7 @@ def test_pip_install_for_package():
     )
 
     a90210 = importlib.import_module("a90210")
-    mod_b = importlib.import_module(".mod_b",a90210.__name__)
+    mod_b = importlib.import_module(".mod_b", a90210.__name__)
 
     assert a90210.mod_a.hello().startswith("Hi there!")
     assert mod_b.sup().startswith("Sup... Hi there!")
@@ -60,47 +60,46 @@ def test_pip_install_for_package():
     )
 
 
+import site
+
+
 def test_venv_with_install():
+    """--target is simply an instruction of where to dump the files that would normally go into the python site-packages folder.
+    THere are three ways to do this:
+    * Let pipenv use the python-activator's environment (virtual, system, whatever). This does not require any update to sys.path
+    * Set PIPENV_IGNORE_VIRTUALENVS and provide a location via fully qualified PIPENV_CUSTOM_VENV_NAME. Requires
+    adding the 'site-packages' path in the custom virtual env to sys.path, which is a little os dependant
+    * Set a "target" on install using '--extra-pip-args "--target etc/targ"'. This path gets added to sys.paths.
+    DOesn't allow multiple python versions"""
     wheel = Wheel("etc/90210-v.6/dist/a90210-0.1.0-py3-none-any.whl")
     sdist = SDist("etc/90210-v.6/dist/a90210-0.1.0.tar.gz")
 
     assert wheel.name == sdist.name
 
-    sys.path.append("etc/targ")
-    # venv_process = venv.create(env_dir="etc/venv", clear=True)
-    os.environ['WORKON_HOME'] = "etc/venv"
-    os.environ['PIPENV_IGNORE_VIRTUALENVS'] = "True"
+    os.environ["PIPENV_IGNORE_VIRTUALENVS"] = "True"
 
-    # pip_process = subprocess.run(
-    #     [
-    #         "python",
-    #         "-m",
-    #         "pip",
-    #         "install",
-    #         "--target",
-    #         "etc/targ",
-    #         wheel.filename,
-    #         "--force-reinstall",
-    #     ],
-    #     capture_output=True
-    # )
+    """This uses a custom venv location with 'site-packages' but is os dependent."""
+    # os.environ[
+    #     "PIPENV_CUSTOM_VENV_NAME"
+    # ] = "/Users/pboisver/dev/code-red/blueberrypy_test/etc/pyshelf"
+    # pip_process = subprocess.run(["pipenv", "--python", "3.11"], capture_output="True")
+    # sys.path.append("etc/pyshelf/lib/python3.11/site-packages")
+
+    sys.path.append("etc/targ")  # works with '--target etc/targ'
+
+    pip_process = subprocess.run(["pipenv", "--venv"], capture_output="True")
 
     pip_process = subprocess.run(
-        [
-            "pipenv",
-            "install",
-            wheel.filename,
-        ],
-        capture_output=True
+        ["pipenv", "install", wheel.filename, "--extra-pip-args", "--target etc/targ"],
+        capture_output=True,
     )
 
     a90210 = importlib.import_module("a90210")
-    mod_b = importlib.import_module(".mod_b",a90210.__name__)
+    mod_b = importlib.import_module(".mod_b", a90210.__name__)
 
     assert a90210.mod_a.hello().startswith("Hi there!")
     assert mod_b.sup().startswith("Sup... Hi there!")
 
-    pass
+    # subprocess.run(["pipenv", "uninstall", "--all"])
 
-'''
-b"Installing etc/90210-v.6/dist/a90210-0.1.0-py3-none-any.whl...\nResolving etc/90210-v.6/dist/a90210-0.1.0-py3-none-any.whl...\nAdding a90210 to Pipfile's [packages] ...\n\xe2\x9c\x94 Installation Succeeded\nInstalling dependencies from Pipfile.lock (11d2a4)...\nTo activate this project's virtualenv, run pipenv shell.\nAlternatively, run a command inside the virtualenv with pipenv run.\n"'''
+    pass

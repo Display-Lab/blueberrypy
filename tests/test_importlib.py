@@ -19,9 +19,9 @@ def test_basic_relative_import_works():
     module = importlib.util.module_from_spec(spec)
     modules[spec.name] = module
 
-    importlib.import_module(spec.name)
-    importlib.import_module(".hello_with_import",spec.name) 
-    # spec.loader.exec_module(module)
+    # importlib.import_module(spec.name)
+    # importlib.import_module(".hello_with_import",spec.name) 
+    spec.loader.exec_module(module)
 
     assert module.hello_with_import.sup() == "Sup... Hi there!"
     assert module.hello.hello() == "Hi there!"

@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-a90210 = {path = "./etc/90210-v.6/dist/a90210-0.1.0-py3-none-any.whl"}
 
 [dev-packages]
 

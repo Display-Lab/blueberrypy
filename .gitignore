@@ -169,3 +169,5 @@ cython_debug/
 
 # Additional project specific
 .python-version
+# test fixtures
+!etc/**/dist
